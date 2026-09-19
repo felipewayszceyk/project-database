@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Contact - Ireland Travel Guide{% endblock %}
+{% block title %} Add New Client {% endblock %}
 
 {% block content %}
 
 <section class="page-header">
-    <h1>Contact Us ✉️</h1>
-    <p>Have a question or suggestion? Get in touch!</p>
+    <h1>Add Client ✉️</h1>
+    <p>Register a new client for consultancy</p>
 </section>
 
 <section class="contact-section">
@@ -23,23 +23,28 @@
     </div>
     {% endif %}
 
-    <form method="POST" action="/contact">
+    <form method="POST" action="{{ url_for('new_client') }}">
         <div class="form-group">
-            <label for="name">Your Name</label>
-            <input type="text" id="name" name="name" placeholder="John Doe">
+            <label for="full_name">Full Name</label>
+            <input type="text" id="full_name" name="full_name" placeholder="Joao Gomes">
         </div>
 
         <div class="form-group">
-            <label for="email">Your Email</label>
-            <input type="email" id="email" name="email" placeholder="john@example.com">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="joao@example.com">
         </div>
 
         <div class="form-group">
-            <label for="message">Your Message</label>
-            <textarea id="message" name="message" rows="5" placeholder="Write your message here..."></textarea>
+            <label for="phone">Phone Number</label>
+             <input type="text" id="phone" name="phone" placeholder="+00 00 00000-000">
         </div>
 
-        <button type="submit" class="btn">Send Message</button>
+        <div class="form-group">
+            <label for="country_of_origin">Country of Origin</label>
+             <input type="text" id="country_of_origin" name="country_of_origin" placeholder= "Brazil">
+        </div>
+        
+        <button type="submit" class="btn">Save Client</button>
     </form>
 
 </section>
