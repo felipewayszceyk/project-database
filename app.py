@@ -4,7 +4,6 @@ from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-
 load_dotenv()
 
 # Create the Flask application
@@ -14,12 +13,14 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 
 db = SQLAlchemy(app)
 
+
 class MoveType(db.Model):
     __tablename__ = "move_types"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
     description = db.Column(db.Text)
+
 
 class Service(db.Model):
     __tablename__ = "services"
@@ -31,6 +32,7 @@ class Service(db.Model):
     duration_minutes = db.Column(db.Integer)
     is_active = db.Column(db.Boolean, nullable=False, default=True)
 
+
 class Client(db.Model):
     __tablename__ = "clients"
 
@@ -40,10 +42,13 @@ class Client(db.Model):
     phone = db.Column(db.String(30))
     country_of_origin = db.Column(db.String(80), nullable=False, default="Brazil")
     move_type_id = db.Column(db.Integer, db.ForeignKey("move_types.id"), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)    
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
     move_type = db.relationship("MoveType", backref="clients")
-    bookings = db.relationship("Booking", backref="client", cascade="all, delete-orphan")
+    bookings = db.relationship(
+        "Booking", backref="client", cascade="all, delete-orphan"
+    )
+
 
 class Booking(db.Model):
     __tablename__ = "bookings"
@@ -57,7 +62,9 @@ class Booking(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
     service = db.relationship("Service", backref="bookings")
-    payments = db.relationship("Payment", backref="booking", cascade="all, delete-orphan")
+    payments = db.relationship(
+        "Payment", backref="booking", cascade="all, delete-orphan"
+    )
 
 
 class Payment(db.Model):
@@ -68,7 +75,8 @@ class Payment(db.Model):
     amount = db.Column(db.Numeric(8, 2), nullable=False)
     method = db.Column(db.String(20), nullable=False)
     status = db.Column(db.String(20), nullable=False, default="pending")
-    paid_at = db.Column(db.DateTime)    
+    paid_at = db.Column(db.DateTime)
+
 
 reasons = [
     {
@@ -193,27 +201,12 @@ def tips_page():
     return render_template("tips.html", tips=tips)
 
 
-# Contact page - handles both GET and POST requests
-# GET: renders the empty form
-# POST: processes the form data and validates input
-@app.route("/contact", methods=["GET", "POST"])
-def contact():
-    if request.method == "POST":
-        name = request.form.get("name")
-        email = request.form.get("email")
-        message = request.form.get("message")
-        # Validate that all fields are filled in
-        if not name or not email or not message:
-            error = "Please fill in all fields."
-            return render_template("contact.html", error=error)
-
-        # If validation passes, show success message
-        success = f"Thank you, {name}! Your message has been received."
-        return render_template("contact.html", success=success)
-
-    return render_template("contact.html")
+@app.route("/clients")
+def clients():
+    all_clients = Client.query.order_by(Client.full_name).all()
+    return render_template("clients.html", clients=all_clients)
 
 
 # Run the app in debug mode during development
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
