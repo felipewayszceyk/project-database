@@ -40,7 +40,18 @@ class Client(db.Model):
     move_type_id = db.Column(db.Integer, db.ForeignKey("move_types.id"), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)    
 
+class Booking(db.Model):
+    __tablename__ = "bookings"
 
+    id = db.Column(db.Integer, primary_key=True)
+    client_id = db.Column(db.Integer, db.ForeignKey("clients.id"), nullable=False)
+    service_id = db.Column(db.Integer, db.ForeignKey("services.id"), nullable=False)
+    scheduled_at = db.Column(db.DateTime, nullable=False)
+    status = db.Column(db.String(20), nullable=False, default="scheduled")
+    notes = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
+
+    
 
 reasons = [
     {
