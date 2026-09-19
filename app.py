@@ -13,11 +13,23 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 db = SQLAlchemy(app)
 
 class Movetype (db.Model):
-    __tablename__= "move_types"
+    __tablename__ = "move_types"
 
    id = db.Column(db.Integer, primary_key=True)
    name = db.Column(db.String(100), nullable=false, unique=true)
    description = db.Column(db.Text)
+
+class Services (db.Model):
+    __tablename__ = "services"
+
+    id = db.Column(db.Interger, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    description = db.Column(db.Text)
+    price = db.Column(db.Numeric(8, 2), nullable=False)
+    duration_minutes = db.Column(db.Integer)
+    is_active = db.Column(db.Boolean, nullable=False, default=True)
+
+
 
 reasons = [
     {
