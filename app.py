@@ -29,6 +29,17 @@ class Services (db.Model):
     duration_minutes = db.Column(db.Integer)
     is_active = db.Column(db.Boolean, nullable=False, default=True)
 
+class Client(db.Model):
+    __tablename__ = "clients"
+
+    id = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(255), nullable=False, unique=True)
+    phone = db.Column(db.String(30))
+    country_of_origin = db.Column(db.String(80), nullable=False, default="Brazil")
+    move_type_id = db.Column(db.Integer, db.ForeignKey("move_types.id"), nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)    
+
 
 
 reasons = [
