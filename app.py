@@ -51,7 +51,15 @@ class Booking(db.Model):
     notes = db.Column(db.Text)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
-    
+class Payment(db.Model):
+    __tablename__ = "payments"
+
+    id = db.Column(db.Integer, primary_key=True)
+    booking_id = db.Column(db.Integer, db.ForeignKey("bookings.id"), nullable=False)
+    amount = db.Column(db.Numeric(8, 2), nullable=False)
+    method = db.Column(db.String(20), nullable=False)
+    status = db.Column(db.String(20), nullable=False, default="pending")
+    paid_at = db.Column(db.DateTime)    
 
 reasons = [
     {
