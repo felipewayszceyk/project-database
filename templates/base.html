@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Felipe Abroad{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+    <div class="header-inner">
+        <a href="{{ url_for('home') }}" class="header-brand">
+            <img src="{{ url_for('static', filename='images/logo-felipe-abroad.png') }}" 
+                 class="logo" alt="logo-image">
+            <h1>FELIPE ABROAD</h1>
+        </a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About Me</a></li>
+                <li><a href="{{ url_for('reasons_page') }}">Why Ireland</a></li>
+                <li><a href="{{ url_for('tips_page') }}">Tips</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>© 2025 Felipe Abroad. 🍀</p>
+    </footer>
+
+</body>
+</html>

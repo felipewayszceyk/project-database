@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}{{ reason.name }} - Felipe Abroad{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <h1>{{ reason.icon }} {{ reason.name }}</h1>
+</section>
+
+<section class="detail-content">
+    <p class="description">{{ reason.description }}</p>
+
+    <div class="extra">
+        {% if reason.name == "Safety & Security" %}
+        <p>Ireland has long been recognised as one of the most peaceful and secure nations in the world. According to the Global Peace Index, 
+            Ireland consistently ranks among the top 15 safest countries globally, outperforming most of its European neighbours. 
+            The country benefits from a stable democratic government, a well-funded and community-oriented police force known as An Garda 
+            Síochána, and a deeply rooted culture of neighbourly trust and social cohesion. Unlike many other major European cities, Irish c
+            ities such as Dublin, Cork and Galway maintain relatively low levels of violent crime, and public spaces feel safe and accessible 
+            at all hours. For families relocating from abroad, this sense of security is often one of the most immediately noticeable and 
+            appreciated aspects of life in Ireland.</p>
+
+        {% elif reason.name == "Strong Job Market" %}
+        <p>Ireland has transformed itself into one of Europe's most dynamic and attractive economies over the past three decades. Often 
+            referred to as the Silicon Valley of Europe, Ireland is home to the European headquarters of some of the world's most influential 
+            companies, including Google, Meta, Apple, Microsoft, LinkedIn and Salesforce. This concentration of multinational corporations has 
+            created a thriving job market with opportunities across a wide range of sectors, from software engineering and data science to 
+            marketing, finance and operations. Ireland's unemployment rate has remained consistently low, hovering around three to five 
+            percent, which is well below the European average.</p>
+
+        {% elif reason.name == "English Speaking Country" %}
+        <p>One of Ireland's most significant practical advantages for immigrants and international professionals is that English is the 
+            primary language of daily life, business, education and government. This dramatically lowers the barrier to integration and makes 
+            the transition to life in Ireland far smoother than moving to a non-English speaking country. From opening a bank account to 
+            attending job interviews, everything in Ireland is conducted in English. Ireland also has a wonderfully diverse and multicultural 
+            population, particularly in Dublin, where you will find large communities of Brazilians, Indians, Poles, Spaniards and people from 
+            almost every corner of the globe.</p>
+
+        {% elif reason.name == "Education System" %}
+        <p>Ireland's education system is widely regarded as one of the finest in the world. At the primary and secondary level, Irish schools 
+            are known for their high academic standards, dedicated teachers and inclusive approach to education. At the third level, Ireland 
+            boasts several world-class universities that consistently feature in global rankings. Trinity College Dublin, founded in 1592, is 
+            Ireland's oldest and most prestigious university. For international students, Ireland is a particularly attractive destination 
+            because courses are taught in English and graduates benefit from a two-year stay-back visa that allows them to work in Ireland 
+            after completing their studies.</p>
+
+        {% elif reason.name == "Gateway to Europe" %}
+        <p>Dublin Airport is one of the busiest and best-connected airports in Europe, offering direct flights to over 180 destinations across 
+            Europe, North America and the Middle East. Ireland is home to Ryanair, one of Europe's largest budget airlines, which means 
+            flights to European cities are frequently available at very low prices. As a member state of the European Union, Irish residents 
+            benefit from freedom of movement across the Schengen Area, making travel across the continent seamless and hassle-free. A weekend 
+            trip to Lisbon, a city break in Amsterdam or a summer holiday in Barcelona are all within easy reach.</p>
+
+        {% elif reason.name == "Quality of Life" %}
+        <p>Ireland consistently ranks among the top countries in the world for overall quality of life. The country offers a rare combination 
+            of natural beauty, modern infrastructure and a cultural attitude that genuinely prioritises wellbeing. The Irish landscape is 
+            breathtaking — rolling green hills, rugged Atlantic coastlines and pristine lakes are all within easy reach of even the largest 
+            cities. Irish workplace culture has also evolved significantly, with a growing emphasis on flexibility, remote working and 
+            employee wellbeing. Most companies now offer hybrid working arrangements, generous annual leave and a friendly atmosphere that 
+            makes it easier to maintain a healthy work-life balance.</p>
+
+        {% endif %}
+    </div>
+
+    <h2>Highlights</h2>
+    <ul class="highlights-list">
+        {% for highlight in reason.highlights %}
+        <li>✅ {{ highlight }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ url_for('reasons_page') }}" class="btn">← Back to Reasons</a>
+</section>
+
+{% endblock %}

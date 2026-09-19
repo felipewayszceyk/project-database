@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Travel Tips - Ireland Travel Guide{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <h1>Travel Tips 🧳</h1>
+    <p>Everything you need to know before visiting Ireland</p>
+</section>
+
+<section class="tips-list">
+    {% for tip in tips %}
+    <div class="tip-card">
+        <span class="tip-number">{{ loop.index }}</span>
+        <p>{{ tip }}</p>
+    </div>
+    {% endfor %}
+</section>
+
+{% endblock %}

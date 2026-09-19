@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Contact - Ireland Travel Guide{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <h1>Contact Us ✉️</h1>
+    <p>Have a question or suggestion? Get in touch!</p>
+</section>
+
+<section class="contact-section">
+
+    {% if success %}
+    <div class="alert success">
+        {{ success }}
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div class="alert error">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="/contact">
+        <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" placeholder="John Doe">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Your Email</label>
+            <input type="email" id="email" name="email" placeholder="john@example.com">
+        </div>
+
+        <div class="form-group">
+            <label for="message">Your Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Write your message here..."></textarea>
+        </div>
+
+        <button type="submit" class="btn">Send Message</button>
+    </form>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Reasons - Ireland Travel Guide{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <h1>Why Move to Ireland? 🍀</h1>
+    <p>Discover the top reasons why people choose Ireland as their new home</p>
+</section>
+<!-- Loop through each reason passed from app.py -->
+<section class="destinations-list">
+    {% for reason in reasons %}
+    <div class="destination-card">
+        <h2>{{ reason.icon }} {{ reason.name }}</h2>
+        <p>{{ reason.description }}</p>
+<!-- url_for generates the correct URL for the reason detail page -->
+        <a href="{{ url_for('reason_detail', name=reason.name) }}" class="btn">
+            Learn More
+        </a>
+    </div>
+    {% endfor %}
+</section>
+
+{% endblock %}

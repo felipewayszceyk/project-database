@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Felipe Abroad{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <h1>Welcome to Felipe Abroad 🍀</h1>
+    <p>Discover the Emerald Isle! Stunning landscapes, rich history, and warm hospitality.</p>
+    <a href="{{ url_for('reasons_page') }}" class="btn">Why Ireland</a>
+</section>
+
+<section class="intro">
+    <h2>Why Move to Ireland?</h2>
+    <div class="cards">
+        <div class="card">
+            <h3>🌿 Life Balance</h3>
+            <p>Ireland consistently ranks among the top countries for quality of life.
+                Stunning nature on your doorstep, and a culture 
+                that values time with family and friends.</p>
+        </div>
+        <div class="card">
+            <h3>💼 Economy</h3>
+            <p>Home to the European headquarters of Google, Meta, Apple and many more. 
+               Ireland offers a thriving job market, competitive salaries and a 
+               business-friendly environment.</p>
+        </div>
+        <div class="card">
+            <h3>🎵 Culture</h3>
+            <p>From traditional music sessions in cosy pubs to world-class festivals, 
+               Ireland has a rich and welcoming culture that makes it easy 
+               to feel at home.</p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
