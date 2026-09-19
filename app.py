@@ -12,6 +12,13 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 
 db = SQLAlchemy(app)
 
+class Movetype (db.Model):
+    __tablename__= "move_types"
+
+   id = db.Column(db.Integer, primary_key=True)
+   name = db.Column(db.String(100), nullable=false, unique=true)
+   description = db.Column(db.Text)
+
 reasons = [
     {
         "name": "Safety & Security",
