@@ -40,6 +40,9 @@ class Client(db.Model):
     move_type_id = db.Column(db.Integer, db.ForeignKey("move_types.id"), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)    
 
+    move_type = db.relationship("moveType", backref="clients")
+    bookings = db.relationship ("Booking", brackref="client", cascade="all, delete-orphans")
+
 class Booking(db.Model):
     __tablename__ = "bookings"
 
