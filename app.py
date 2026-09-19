@@ -2,6 +2,8 @@ import os
 from dotenv import load_dotenv
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
 
 load_dotenv()
 
@@ -12,17 +14,17 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 
 db = SQLAlchemy(app)
 
-class Movetype (db.Model):
+class MoveType(db.Model):
     __tablename__ = "move_types"
 
-   id = db.Column(db.Integer, primary_key=True)
-   name = db.Column(db.String(100), nullable=false, unique=true)
-   description = db.Column(db.Text)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    description = db.Column(db.Text)
 
-class Services (db.Model):
+class Service(db.Model):
     __tablename__ = "services"
 
-    id = db.Column(db.Interger, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
     description = db.Column(db.Text)
     price = db.Column(db.Numeric(8, 2), nullable=False)
@@ -40,8 +42,8 @@ class Client(db.Model):
     move_type_id = db.Column(db.Integer, db.ForeignKey("move_types.id"), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)    
 
-    move_type = db.relationship("moveType", backref="clients")
-    bookings = db.relationship ("Booking", brackref="client", cascade="all, delete-orphans")
+    move_type = db.relationship("MoveType", backref="clients")
+    bookings = db.relationship("Booking", backref="client", cascade="all, delete-orphan")
 
 class Booking(db.Model):
     __tablename__ = "bookings"
@@ -53,6 +55,10 @@ class Booking(db.Model):
     status = db.Column(db.String(20), nullable=False, default="scheduled")
     notes = db.Column(db.Text)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
+
+    service = db.relationship("Service", backref="bookings")
+    payments = db.relationship("Payment", backref="booking", cascade="all, delete-orphan")
+
 
 class Payment(db.Model):
     __tablename__ = "payments"
