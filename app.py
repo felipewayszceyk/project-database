@@ -260,9 +260,8 @@ def edit_client(client_id):
 
     if not full_name or not email or not move_type_id:
                 error = "Please fill in name, email and move type."
-                return render_template(
-                    "client_form.html", client=client, move_types=move_types, error=error
-                )
+                return render_template("client_form.html", client=client, 
+                                       move_types=move_types, error=error)
     
     client.full_name = full_name
     client.email = email
@@ -270,6 +269,20 @@ def edit_client(client_id):
     client.country_of_origin = country or "Brazil"
     client.move_type_id = int(move_type_id)
 
+
+    try
+        db.session.commit()
+    except IntegrityError
+        db.session.rollback()
+        error = "this email is already registered"
+        return render_template("client_form.html", client=client, 
+                               move_types=move_types, error=error)
+    return redirect(url_for("clients"))
+
+
+return render_template("client_form.html, client=client, move_types=move_type")
+
+        
 # Run the app in debug mode during development
 if __name__ == "__main__":
     app.run(debug=False)
