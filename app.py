@@ -195,13 +195,13 @@ def reason_detail(name):
 def tips_page():
     return render_template("tips.html", tips=tips)
 
-
+# show the registered clients
 @app.route("/clients")
 def clients():
     all_clients = Client.query.order_by(Client.full_name).all()
     return render_template("clients.html", clients=all_clients)
 
-
+#route to add a new client
 @app.route("/clients/new", methods=["GET", "POST"])
 def new_client():
     move_types = MoveType.query.order_by(MoveType.name).all()
@@ -213,6 +213,7 @@ def new_client():
         country = request.form.get("country_of_origin")
         move_type_id = request.form.get("move_type_id")
 
+        #These three fields are required
         if not full_name or not email or not move_type_id:
             error = "Please fill in name, email and move type."
             return render_template(
@@ -240,7 +241,7 @@ def new_client():
 
     return render_template("client_form.html", move_types=move_types)
 
-
+#route to edit a client r any information    
 @app.route("/client/<int:client_id>/edit", methods=["GET", "POST"])
 def edit_client(client_id):
     client = db.get_or_404(Client, client_id)
@@ -253,6 +254,7 @@ def edit_client(client_id):
         country = request.form.get("country_of_origin")
         move_type_id = request.form.get("move_type_id")
 
+        # These three fields are required
         if not full_name or not email or not move_type_id:
             error = "Please fill in name, email and move type."
             return render_template(
@@ -268,6 +270,8 @@ def edit_client(client_id):
         try:
             db.session.commit()
         except IntegrityError:
+
+# The email column is unique, so a duplicate raises IntegrityError
             db.session.rollback()
             error = "this email is already registered"
             return render_template(
@@ -278,9 +282,10 @@ def edit_client(client_id):
 
     return render_template("client_form.html", client=client, move_types=move_types)
 
-
+# the route to delete clients and all of their information
 @app.route("/clients/<int:client_id>/delete", methods=["POST"])
 def delete_client(client_id):
+    """Delete a client."""
     client = db.get_or_404(Client, client_id)
     db.session.delete(client)
     db.session.commit()
@@ -293,7 +298,7 @@ def bookings():
     all_bookings = Booking.query.order_by(Booking.scheduled_at).all()
     return render_template("bookings.html", bookings=all_bookings)
 
-
+# create a new booking with registered clients
 @app.route("/bookings/new", methods=["GET", "POST"])
 def new_booking():
     """Create a booking (GET shows the form, POST saves it)."""
@@ -307,6 +312,7 @@ def new_booking():
         status = request.form.get("status") or "scheduled"
         notes = request.form.get("notes")
 
+ # Basic validation: these three fields are required
         if not client_id or not service_id or not scheduled_at:
             error = "Please choose a client, a service and a date."
             return render_template(
@@ -331,7 +337,7 @@ def new_booking():
         "booking_form.html", clients=all_clients, services=all_services
     )
 
-
+#route do edit the bookings
 @app.route("/bookings/<int:booking_id>/edit", methods=["GET", "POST"])
 def edit_booking(booking_id):
     """Show the edit form (GET) and save the changes (POST)."""
@@ -368,7 +374,7 @@ def edit_booking(booking_id):
         "booking_form.html", booking=booking, clients=all_clients, services=all_services
     )
 
-
+#route to delete the bookings
 @app.route("/bookings/<int:booking_id>/delete", methods=["POST"])
 def delete_booking(booking_id):
     """Delete a booking."""
