@@ -1,7 +1,8 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import IntegrityError
 from datetime import datetime
 
 load_dotenv()
@@ -205,6 +206,45 @@ def tips_page():
 def clients():
     all_clients = Client.query.order_by(Client.full_name).all()
     return render_template("clients.html", clients=all_clients)
+
+
+@app.route("/clients/new", methods=["GET", "POST"])
+def new_client():
+    move_types = MoveType.query.order_by(MoveType.name).all()
+
+    if request.method == "POST":
+        full_name = request.form.get("full_name")
+        email = request.form.get("email")
+        phone = request.form.get("phone")
+        country = request.form.get("country_of_origin")
+        move_type_id = request.form.get("move_type_id")
+
+        if not full_name or not email or not move_type_id:
+            error = "Please fill in name, email and move type."
+            return render_template(
+                "client_form.html", move_types=move_types, error=error
+            )
+
+        client = Client(
+            full_name=full_name,
+            email=email,
+            phone=phone or None,
+            country_of_origin=country or "Brazil",
+            move_type_id=int(move_type_id),
+        )
+        db.session.add(client)
+        try:
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            error = "This email is already registered."
+            return render_template(
+                "client_form.html", move_types=move_types, error=error
+            )
+
+        return redirect(url_for("clients"))
+
+    return render_template("client_form.html", move_types=move_types)
 
 
 # Run the app in debug mode during development
