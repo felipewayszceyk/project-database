@@ -5,7 +5,7 @@
 {% block content %}
 
 <section class="page-header">
-    <h1>Add Client ✉️</h1>
+    <h1>Add Client </h1>
     <p>Register a new client for consultancy</p>
 </section>
 
@@ -17,25 +17,29 @@
     </div>
     {% endif %}
 
-    <form method="POST" action="{{ url_for('new_client') }}">
+    <form method="POST" action="{{ url_for('edit_client', client_id=client.id) if client else url_for('new_client') }}">
         <div class="form-group">
             <label for="full_name">Full Name</label>
-            <input type="text" id="full_name" name="full_name" placeholder="Joao Gomes">
+            <input type="text" id="full_name" name="full_name" placeholder="Joao Gomes" 
+                   value="{{ client.full_name if client else '' }}">
         </div>
 
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="joao@example.com">
+            <input type="email" id="email" name="email" placeholder="joao@example.com"
+            value="{{ client.email if client else '' }}">
         </div>
 
         <div class="form-group">
             <label for="phone">Phone Number</label>
-             <input type="text" id="phone" name="phone" placeholder="+00 00 00000-000">
+             <input type="text" id="phone" name="phone" placeholder="+00 00 00000-000"
+             value="{{ client.phone or '' if client else '' }}">
         </div>
 
         <div class="form-group">
             <label for="country_of_origin">Country of Origin</label>
-             <input type="text" id="country_of_origin" name="country_of_origin" placeholder= "Brazil">
+             <input type="text" id="country_of_origin" name="country_of_origin" placeholder= "Brazil"
+             value="{{ client.country_of_origin if client else '' }}">
         </div>
 
         <div class="form-group">
@@ -43,12 +47,15 @@
             <select id="move_type_id" name="move_type_id">
                 <option value="">Select a move type</option>
                 {% for move_type in move_types %}
-                <option value="{{ move_type.id }}">{{ move_type.name }}</option>
+                <option value="{{ move_type.id }}"
+                    {% if client and client.move_type_id == move_type.id %}selected{% endif %}>
+                    {{ move_type.name }}
+                </option>
                 {% endfor %}
             </select>
         </div>
 
-        <button type="submit" class="btn">Save Client</button>
+        <button type="submit" class="btn">{{ 'Save changes' if client else 'Save Client'}}</button>
     </form>
 
 </section>

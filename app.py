@@ -82,7 +82,6 @@ class Payment(db.Model):
 reasons = [
     {
         "name": "Safety & Security",
-        "icon": "🛡️",
         "description": "Ireland is one of the safest countries in Europe, with low crime rates and a welcoming, friendly society that makes "
         "newcomers feel at home quickly.",
         "highlights": [
@@ -94,7 +93,6 @@ reasons = [
     },
     {
         "name": "Strong Job Market",
-        "icon": "💼",
         "description": "With major tech, pharma and financial companies based in Ireland, finding a well-paid job is very achievable "
         "especially in Dublin and Cork.",
         "highlights": [
@@ -105,7 +103,6 @@ reasons = [
     },
     {
         "name": "English Speaking Country",
-        "icon": "🗣️",
         "description": "As an English-speaking nation, adapting to daily life, work and communication is much easier compared to other "
         "European countries.",
         "highlights": [
@@ -118,7 +115,6 @@ reasons = [
     },
     {
         "name": "Education System",
-        "icon": "🎓",
         "description": "Ireland has a world-class education system with highly ranked universities, making it a great place for families "
         "with children or those looking to study further.",
         "highlights": [
@@ -129,7 +125,6 @@ reasons = [
     },
     {
         "name": "Gateway to Europe",
-        "icon": "✈️",
         "description": "Living in Ireland gives you easy access to travel across Europe. Weekend trips to Paris, Lisbon or Barcelona are just"
         " a short flight away.",
         "highlights": [
@@ -141,7 +136,6 @@ reasons = [
     },
     {
         "name": "Quality of Life",
-        "icon": "🌿",
         "description": "From clean air and green landscapes to excellent healthcare and social services, Ireland offers a high standard of "
         "living for those who settle here.",
         "highlights": [
@@ -246,51 +240,53 @@ def new_client():
 
     return render_template("client_form.html", move_types=move_types)
 
-@app.route("/client/<int:client_id/edit", methods=["GET", "POST"])
+
+@app.route("/client/<int:client_id>/edit", methods=["GET", "POST"])
 def edit_client(client_id):
-    cliente = db.get_or_404(Client, client_id)
+    client = db.get_or_404(Client, client_id)
     move_types = MoveType.query.order_by(MoveType.name).all()
 
-    if request.method == "POST"
-       full_name = request.form.get("full_name")
-       email = request.form.get("email")
-       phone = request.form.get("phone")
-       country = request.form.get("country_of_origin")
-       move_type_id = request.form.get("move_type_id")
+    if request.method == "POST":
+        full_name = request.form.get("full_name")
+        email = request.form.get("email")
+        phone = request.form.get("phone")
+        country = request.form.get("country_of_origin")
+        move_type_id = request.form.get("move_type_id")
 
-    if not full_name or not email or not move_type_id:
-                error = "Please fill in name, email and move type."
-                return render_template("client_form.html", client=client, 
-                                       move_types=move_types, error=error)
-    
-    client.full_name = full_name
-    client.email = email
-    client.phone = phone or None
-    client.country_of_origin = country or "Brazil"
-    client.move_type_id = int(move_type_id)
+        if not full_name or not email or not move_type_id:
+            error = "Please fill in name, email and move type."
+            return render_template(
+                "client_form.html", client=client, move_types=move_types, error=error
+            )
 
+        client.full_name = full_name
+        client.email = email
+        client.phone = phone or None
+        client.country_of_origin = country or "Brazil"
+        client.move_type_id = int(move_type_id)
 
-    try
-        db.session.commit()
-    except IntegrityError
-        db.session.rollback()
-        error = "this email is already registered"
-        return render_template("client_form.html", client=client, 
-                               move_types=move_types, error=error)
-    return redirect(url_for("clients"))
+        try:
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            error = "this email is already registered"
+            return render_template(
+                "client_form.html", client=client, move_types=move_types, error=error
+            )
 
+        return redirect(url_for("clients"))
 
-return render_template("client_form.html, client=client, move_types=move_type")
+    return render_template("client_form.html", client=client, move_types=move_types)
+
 
 @app.route("/clients/<int:client_id>/delete", methods=["POST"])
 def delete_client(client_id):
     client = db.get_or_404(Client, client_id)
     db.session.delete(client)
     db.session.commit()
-    return redirect(url_for("Clients"))
+    return redirect(url_for("clients"))
 
 
-        
 # Run the app in debug mode during development
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
