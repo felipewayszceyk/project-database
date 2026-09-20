@@ -246,6 +246,29 @@ def new_client():
 
     return render_template("client_form.html", move_types=move_types)
 
+@app.route("/client/<int:client_id/edit", methods=["GET", "POST"])
+def edit_client(client_id):
+    cliente = db.get_or_404(Client, client_id)
+    move_types = MoveType.query.order_by(MoveType.name).all()
+
+    if request.method == "POST"
+       full_name = request.form.get("full_name")
+       email = request.form.get("email")
+       phone = request.form.get("phone")
+       country = request.form.get("country_of_origin")
+       move_type_id = request.form.get("move_type_id")
+
+    if not full_name or not email or not move_type_id:
+                error = "Please fill in name, email and move type."
+                return render_template(
+                    "client_form.html", client=client, move_types=move_types, error=error
+                )
+    
+    client.full_name = full_name
+    client.email = email
+    client.phone = phone or None
+    client.country_of_origin = country or "Brazil"
+    client.move_type_id = int(move_type_id)
 
 # Run the app in debug mode during development
 if __name__ == "__main__":
