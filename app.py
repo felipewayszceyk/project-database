@@ -282,6 +282,14 @@ def edit_client(client_id):
 
 return render_template("client_form.html, client=client, move_types=move_type")
 
+@app.route("/clients/<int:client_id>/delete", methods=["POST"])
+def delete_client(client_id):
+    client = db.get_or_404(Client, client_id)
+    db.session.delete(client)
+    db.session.commit()
+    return redirect(url_for("Clients"))
+
+
         
 # Run the app in debug mode during development
 if __name__ == "__main__":
