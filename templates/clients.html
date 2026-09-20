@@ -12,13 +12,14 @@
 {% if clients %}
 <table class="data-table">
    <thead>
-       <th>Actions</th>
+       
     <tr>
        <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Country</th>
                 <th>Move type</th> 
+                <th>edit/delete</th>
     </tr>
    </thead> 
 
@@ -31,7 +32,11 @@
         <td>{{ client.country_of_origin }}</td>
         <td>{{ client.move_type.name }}</td>
         <td>
-  <a href="{{ url_for('edit_client', client_id=client.id) }}">Edit</a>
+  <form method="get"       
+        action="{{ url_for('edit_client', client_id=client.id) }}"
+        style="display:inline">
+      <button type="submit">Edit</button>
+   </form>
   <form method="post"
         action="{{ url_for('delete_client', client_id=client.id) }}"
         style="display:inline"
