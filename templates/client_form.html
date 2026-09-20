@@ -5,33 +5,53 @@
 {% block content %}
 
 <section class="page-header">
-    <h1>Clients informations</h1>
-    <p>Clients Informations</p>
+    <h1>Add Client ✉️</h1>
+    <p>Register a new client for consultancy</p>
 </section>
 
-{% if clients %}
-<table class="data-table">
-   <thead>
-    <tr>
-       <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Country</th>
-                <th>Move type</th> 
-    </tr>
-   </thead> 
+<section class="contact-section">
 
-   <tbody>
-     {% for client in clients %}
-     <tr>
-        <td>{{ client.full_name }}</td>
-        <td>{{ client.email }}</td>
-        <td>{{ client.phone or "-" }}</td>
-        <td>{{ client.country_of_origin }}</td>
-        <td>{{ client.move_type.name }}</td>
-     </tr>
-   </tbody>
-</table>
+    {% if error %}
+    <div class="alert error">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('new_client') }}">
+        <div class="form-group">
+            <label for="full_name">Full Name</label>
+            <input type="text" id="full_name" name="full_name" placeholder="Joao Gomes">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="joao@example.com">
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+             <input type="text" id="phone" name="phone" placeholder="+00 00 00000-000">
+        </div>
+
+        <div class="form-group">
+            <label for="country_of_origin">Country of Origin</label>
+             <input type="text" id="country_of_origin" name="country_of_origin" placeholder= "Brazil">
+        </div>
+
+        <div class="form-group">
+            <label for="move_type_id">Move type</label>
+            <select id="move_type_id" name="move_type_id">
+                <option value="">Select a move type</option>
+                {% for move_type in move_types %}
+                <option value="{{ move_type.id }}">{{ move_type.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="btn">Save Client</button>
+    </form>
+
+</section>
 
 {% endblock %}
 
