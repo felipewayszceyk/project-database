@@ -289,4 +289,4 @@ def delete_client(client_id):
 
 # Run the app in debug mode during development
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
