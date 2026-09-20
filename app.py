@@ -286,6 +286,84 @@ def delete_client(client_id):
     db.session.commit()
     return redirect(url_for("clients"))
 
+@app.route("/bookings")
+def bookings():
+    """List all bookings, with the client and service names."""
+    all_bookings = Booking.query.order_by(Booking.scheduled_at).all()
+    return render_template("bookings.html", bookings=all_bookings)
+
+
+@app.route("/bookings/new", methods=["GET", "POST"])
+def new_booking():
+    """Create a booking (GET shows the form, POST saves it)."""
+    all_clients = Client.query.order_by(Client.full_name).all()
+    all_services = Service.query.order_by(Service.name).all()
+
+    if request.method == "POST":
+        client_id = request.form.get("client_id")
+        service_id = request.form.get("service_id")
+        scheduled_at = request.form.get("scheduled_at")
+        status = request.form.get("status") or "scheduled"
+        notes = request.form.get("notes")
+
+        if not client_id or not service_id or not scheduled_at:
+            error = "Please choose a client, a service and a date."
+            return render_template("booking_form.html", clients=all_clients,
+                                   services=all_services, error=error)
+
+        booking = Booking(
+            client_id=int(client_id),
+            service_id=int(service_id),
+            scheduled_at=datetime.strptime(scheduled_at, "%Y-%m-%dT%H:%M"),
+            status=status,
+            notes=notes or None,
+        )
+        db.session.add(booking)
+        db.session.commit()
+        return redirect(url_for("bookings"))
+
+    return render_template("booking_form.html", clients=all_clients, services=all_services)
+
+
+@app.route("/bookings/<int:booking_id>/edit", methods=["GET", "POST"])
+def edit_booking(booking_id):
+    """Show the edit form (GET) and save the changes (POST)."""
+    booking = db.get_or_404(Booking, booking_id)
+    all_clients = Client.query.order_by(Client.full_name).all()
+    all_services = Service.query.order_by(Service.name).all()
+
+    if request.method == "POST":
+        client_id = request.form.get("client_id")
+        service_id = request.form.get("service_id")
+        scheduled_at = request.form.get("scheduled_at")
+        status = request.form.get("status") or "scheduled"
+        notes = request.form.get("notes")
+
+        if not client_id or not service_id or not scheduled_at:
+            error = "Please choose a client, a service and a date."
+            return render_template("booking_form.html", booking=booking,
+                                   clients=all_clients, services=all_services, error=error)
+
+        booking.client_id = int(client_id)
+        booking.service_id = int(service_id)
+        booking.scheduled_at = datetime.strptime(scheduled_at, "%Y-%m-%dT%H:%M")
+        booking.status = status
+        booking.notes = notes or None
+        db.session.commit()
+        return redirect(url_for("bookings"))
+
+    return render_template("booking_form.html", booking=booking,
+                           clients=all_clients, services=all_services)
+
+
+@app.route("/bookings/<int:booking_id>/delete", methods=["POST"])
+def delete_booking(booking_id):
+    """Delete a booking."""
+    booking = db.get_or_404(Booking, booking_id)
+    db.session.delete(booking)
+    db.session.commit()
+    return redirect(url_for("bookings"))    
+
 
 # Run the app in debug mode during development
 if __name__ == "__main__":
