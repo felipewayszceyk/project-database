@@ -286,6 +286,7 @@ def delete_client(client_id):
     db.session.commit()
     return redirect(url_for("clients"))
 
+
 @app.route("/bookings")
 def bookings():
     """List all bookings, with the client and service names."""
@@ -308,8 +309,12 @@ def new_booking():
 
         if not client_id or not service_id or not scheduled_at:
             error = "Please choose a client, a service and a date."
-            return render_template("booking_form.html", clients=all_clients,
-                                   services=all_services, error=error)
+            return render_template(
+                "booking_form.html",
+                clients=all_clients,
+                services=all_services,
+                error=error,
+            )
 
         booking = Booking(
             client_id=int(client_id),
@@ -322,7 +327,9 @@ def new_booking():
         db.session.commit()
         return redirect(url_for("bookings"))
 
-    return render_template("booking_form.html", clients=all_clients, services=all_services)
+    return render_template(
+        "booking_form.html", clients=all_clients, services=all_services
+    )
 
 
 @app.route("/bookings/<int:booking_id>/edit", methods=["GET", "POST"])
@@ -341,8 +348,13 @@ def edit_booking(booking_id):
 
         if not client_id or not service_id or not scheduled_at:
             error = "Please choose a client, a service and a date."
-            return render_template("booking_form.html", booking=booking,
-                                   clients=all_clients, services=all_services, error=error)
+            return render_template(
+                "booking_form.html",
+                booking=booking,
+                clients=all_clients,
+                services=all_services,
+                error=error,
+            )
 
         booking.client_id = int(client_id)
         booking.service_id = int(service_id)
@@ -352,8 +364,9 @@ def edit_booking(booking_id):
         db.session.commit()
         return redirect(url_for("bookings"))
 
-    return render_template("booking_form.html", booking=booking,
-                           clients=all_clients, services=all_services)
+    return render_template(
+        "booking_form.html", booking=booking, clients=all_clients, services=all_services
+    )
 
 
 @app.route("/bookings/<int:booking_id>/delete", methods=["POST"])
@@ -362,9 +375,9 @@ def delete_booking(booking_id):
     booking = db.get_or_404(Booking, booking_id)
     db.session.delete(booking)
     db.session.commit()
-    return redirect(url_for("bookings"))    
+    return redirect(url_for("bookings"))
 
 
 # Run the app in debug mode during development
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
